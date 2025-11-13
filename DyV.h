@@ -1,25 +1,48 @@
 
 #ifndef DYV_H
 #define DYV_H
-
 #include <vector>
-#include <iostream>
 
-int BusquedaBinaria(int x, const std::vector<int>& v, int ini, int fin) {
-	if (ini > fin) {
-		return -1;
-	}
+template <typename T>
+int binarySearch(const std::vector<T>& arr, T e) {
+    int izq = 0;
+    int der = arr.size() - 1;
+    while (izq <= der) {
+        int mid = izq + (der - izq) / 2;
+        if (arr[mid] == e) {
+            return mid; // Elemento encontrado
+        } 
+        else if (arr[mid] < e) {
+            izq = mid + 1; // Buscamos en la mitad derecha
+        } 
+        else {
+            der = mid - 1; // Buscamos en la mitad izquierda
+        }
+    }
+    return -1; // Elemento no encontrado
+}
 
-	int medio = (ini + fin) / 2;
+template <typename T>
+T Particion(std::vector<T>& arr, int ini, int fin) {
+    T pivote = arr[fin];
+    int i = ini - 1;
+    for (int j = ini; j < fin; j++) {
+        if (arr[j] <= pivote) {
+            i++;
+            std::swap(arr[i], arr[j]);
+        }
+    }
+    std::swap(arr[i + 1], arr[fin]);
+    return i + 1;
+}
 
-	if (v[medio] == x) {
-		return medio;
-	} else if (v[medio] > x) {
-		return BusquedaBinaria(x, v, ini, medio - 1);
-	} else {
-		return BusquedaBinaria(x, v, medio + 1, fin);
-	}
+template <typename T>
+void quickSort(std::vector<T>& arr, int ini, int fin) {
+    if (ini < fin) {
+        T pivote = Particion(arr, ini, fin);
+        quickSort(arr, ini, pivote - 1);
+        quickSort(arr, pivote + 1, fin);
+    }
 }
 
 #endif
-º
